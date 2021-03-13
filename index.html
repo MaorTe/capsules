@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link rel="stylesheet" href="./css/normalize.css" />
+		<link rel="stylesheet" href="./css/style.css" />
+	</head>
+	<body>
+		<h1>Sort Table</h1>
+		<div class="container">
+			<div><label for="search">Search:</label></div>
+			<input
+				type="text"
+				data-search
+				id="search"
+				value=""
+				placeholder="search..."
+			/>
+
+			<select name="persons" class="persons">
+				<option value="firstName">First Name</option>
+				<option value="lastName">Last Name</option>
+				<option value="capsule">Capsule</option>
+				<option value="age">Age</option>
+				<option value="city">City</option>
+				<option value="gender">Gender</option>
+				<option value="hobby">Hobby</option>
+			</select>
+
+			<table class="table-striped">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Capsule</th>
+						<th>Age</th>
+						<th>City</th>
+						<th>Gender</th>
+						<th>Hobby</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody class="tableBody"></tbody>
+			</table>
+		</div>
+		<script src="script.js"></script>
+	</body>
+</html>
