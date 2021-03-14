@@ -146,3 +146,6 @@ input:focus {
 .hidden {
 	display: none;
 }
+
+@media all and (max-width: 520px) {
+}
