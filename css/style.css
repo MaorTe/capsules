@@ -49,7 +49,6 @@ table th {
 	position: relative;
 	/* cursor: pointer; */
 	color: #f2fbfa;
-	/* border-bottom: solid 15px; */
 }
 table th:after {
 	content: '';
