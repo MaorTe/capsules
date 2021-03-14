@@ -47,7 +47,7 @@ table th {
 	/* background-color: #77d5d4; */
 	background-color: #4c566a;
 	position: relative;
-	cursor: pointer;
+	/* cursor: pointer; */
 	color: #f2fbfa;
 	/* border-bottom: solid 15px; */
 }

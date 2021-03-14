@@ -92,48 +92,6 @@ const renderData = (filtered) => {
 	return tableData;
 };
 
-// async function print() {
-// 	console.log(await getUsers());
-// }
-// function makeTable() {
-// 	let table = document.querySelector('table'),
-// 		ths = table.querySelectorAll('thead th'),
-// 		row = table.querySelectorAll('tbody tr'),
-// 		tBody = table.querySelector('tbody'),
-// 		docF = document.createDocumentFragment();
-
-// 	function sortMe(e) {
-// 		let thsArray = [].slice.call(ths),
-// 			rowArray = [].slice.call(row),
-// 			target = e.target,
-// 			thsIndex = thsArray.indexOf(target);
-
-// 		rowArray.sort(function (a, b) {
-// 			let tdA = a.children[thsIndex].textContent,
-// 				tdB = b.children[thsIndex].textContent;
-
-// 			if (tdA > tdB) {
-// 				return 1;
-// 			} else if (tdA < tdB) {
-// 				return -1;
-// 			} else {
-// 				return 0;
-// 			}
-// 		});
-
-// 		rowArray.forEach(function (row) {
-// 			docF.appendChild(row);
-// 		});
-
-// 		tBody.appendChild(docF);
-// 	}
-
-// 	for (let i = 0; i < ths.length; i++) {
-// 		ths[i].addEventListener('click', sortMe, false);
-// 	}
-// }
-// makeTable();
-
 //-------------event listeners-------------
 
 //i choose to implement 1 listener to 1 button with 2 different functions
