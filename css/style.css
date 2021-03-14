@@ -25,7 +25,8 @@ h1 {
 	border-bottom: 1px #40361e solid;
 	line-height: 1;
 	font-weight: normal;
-	color: #40361e;
+	color: #fff;
+	text-align: center;
 }
 
 table {
@@ -36,7 +37,7 @@ table {
 }
 table th,
 table td {
-	padding: 20px 20px;
+	padding: 5px 10px;
 	text-align: left;
 	border-left: 1px;
 }
@@ -80,7 +81,6 @@ table tr:nth-child(odd) td {
 }
 
 input {
-	/* background-color: rgba(0, 0, 0, 0.1); */
 	background-color: transparent;
 	color: #fff;
 	border: none;
@@ -136,4 +136,13 @@ input:focus {
 	cursor: pointer;
 	background-image: -webkit-linear-gradient(45deg, #24ff07 0%, #f76a35 100%);
 	background-image: linear-gradient(45deg, #24ff07 0%, #f76a35 100%);
+}
+
+.loading-title h1 {
+	text-align: center;
+	border-bottom: 0px;
+	color: red;
+}
+.hidden {
+	display: none;
 }

@@ -1,9 +1,13 @@
 function init() {
+	const loadingTitle = document.querySelector('.loading-title');
+	//if no data table exist make new one and fetch users
 	if (!Array.isArray(JSON.parse(localStorage.getItem('tableData')))) {
 		localStorage.setItem('tableData', JSON.stringify([]));
 		getUsers();
+		loadingTitle.classList.remove('hidden');
 		setTimeout(() => {
 			const tableData = renderData();
+			loadingTitle.classList.add('hidden');
 			localStorage.setItem(`tableData`, JSON.stringify(tableData));
 		}, 10000);
 	}
@@ -26,13 +30,19 @@ const getUsers = async () => {
 	localStorage.setItem(`tableData`, JSON.stringify(tableData));
 };
 
-const tableBody = document.querySelector('.tableBody');
 // render data (read)
+const tableBody = document.querySelector('.tableBody');
 const renderData = (filtered) => {
 	tableBody.innerHTML = '';
 	const tableData = filtered
 		? filtered
 		: JSON.parse(localStorage.getItem('tableData'));
+
+	//small loop for male and female cuz 'male' includes in both
+	tableData.forEach((person) => {
+		person.gender = person.gender[0];
+	});
+
 	// setting table body
 	tableData.forEach((person) => {
 		const tableHtml = `<tbody>
@@ -123,8 +133,11 @@ const renderData = (filtered) => {
 // 	}
 // }
 // makeTable();
+
 //-------------event listeners-------------
-//delete
+
+//i choose to implement 1 listener to 1 button with 2 different functions
+//each function will route to the correct event
 const deleteOrConfirmEventListener = () => {
 	const row = document.querySelectorAll('tbody [data-delete]');
 	row.forEach((el, index) => {
@@ -146,26 +159,34 @@ const deleteOrConfirmEventListener = () => {
 	}
 
 	function confirmPerson(el, index) {
+		const validArray = [];
+		// console.log(validArray);
 		const tableData = JSON.parse(localStorage.getItem('tableData'));
-
+		const data = tableData[index];
 		//insert the new data into localStorage
-		Object.keys(tableData[index]).forEach((key, i) => {
+		Object.keys(data).forEach((key, i) => {
 			if (i === 0) return;
 			const childInput = el.parentElement.parentElement.children[i].children[0];
-			tableData[index][key] = childInput.value;
-			childInput.disabled = true;
+			validArray.push(validationInputs(childInput, data));
+			if (validationInputs(childInput, data)) {
+				data[key] = childInput.value;
+				childInput.disabled = true;
+			}
 		});
-		localStorage.setItem('tableData', JSON.stringify(tableData));
-
-		//replace previous style of cancel button to edit
-		el.classList.remove('confirm-btn');
-		el.classList.add('delete-btn');
-		el.textContent = 'delete';
-		//replace previous style of delete button to confirm
-		const editButton = el.parentElement.previousElementSibling.firstChild;
-		editButton.classList.remove('cancel-btn');
-		editButton.classList.add('edit-btn');
-		editButton.textContent = 'edit';
+		console.log(validArray);
+		console.log(validArray.every((val, i, arr) => val === arr[0]));
+		if (validArray.every((val, i, arr) => val === arr[0])) {
+			localStorage.setItem('tableData', JSON.stringify(tableData));
+			//replace previous btn style
+			el.classList.remove('confirm-btn');
+			el.classList.add('delete-btn');
+			el.textContent = 'delete';
+			//replace previous btn style
+			const editButton = el.parentElement.previousElementSibling.firstChild;
+			editButton.classList.remove('cancel-btn');
+			editButton.classList.add('edit-btn');
+			editButton.textContent = 'edit';
+		} else alert('one or more values invalid');
 	}
 };
 
@@ -176,13 +197,12 @@ const editOrCancelEventListener = () => {
 		el.addEventListener('click', () => {
 			const currentPerson =
 				el.parentElement.parentElement.children[1].children[0];
-			console.log(el.parentElement.parentElement.childNodes);
 			currentPerson.focus();
-			updateItem(el, currentPerson, index);
+			updatePerson(el, currentPerson, index);
 		});
 	});
 
-	function updateItem(el, currentPerson, index) {
+	function updatePerson(el, currentPerson, index) {
 		//replace style of edit button to cancel
 		el.classList.remove('edit-btn');
 		el.classList.add('cancel-btn');
@@ -194,13 +214,26 @@ const editOrCancelEventListener = () => {
 		deleteButton.classList.add('confirm-btn');
 		deleteButton.textContent = 'confirm';
 
-		//row inputs enabling or disabling each input upon event button clicked
-		let isFocused = document.activeElement === currentPerson;
+		//--using state variable to change between wrong input states--
+		//if input is wrong the state variable will focus on it
+		let state;
+		let focusedState;
+		for (let i = 1; i <= 7; i++) {
+			state = el.parentElement.parentElement.children[i].children[0];
+			if (!state.disabled) {
+				focusedState = el.parentElement.parentElement.children[i].children[0];
+			}
+		}
+
+		if (focusedState) focusedState.focus();
+		//since the confirm button disabled all the correct inputs
+		//the state.focus() will focus on the incorrect values left
+		let isFocused = document.activeElement === focusedState;
 		if (!isFocused) {
 			for (let i = 1; i <= 7; i++) {
 				el.parentElement.parentElement.children[i].children[0].disabled = false;
+				state.focus();
 			}
-			currentPerson.focus();
 		} else {
 			//replace previous style of cancel button to edit
 			el.classList.remove('cancel-btn');
@@ -211,6 +244,7 @@ const editOrCancelEventListener = () => {
 			deleteButton.classList.add('delete-btn');
 			deleteButton.textContent = 'delete';
 
+			//revert data changes after clicked cancel button
 			const tableData = JSON.parse(localStorage.getItem('tableData'));
 			for (let i = 1; i <= 7; i++) {
 				const child = el.parentElement.parentElement.children[i].children[0];
@@ -229,11 +263,29 @@ searchInput.addEventListener('keyup', (e) => {
 	const searchString = e.target.value;
 	const filteredCharacters = tableData.filter((character, i) => {
 		return (
-			character[selectedDropDownValue].toLowerCase().includes(searchString) && i
+			character[selectedDropDownValue]
+				.toString()
+				.toLowerCase()
+				.includes(searchString.toLowerCase()) && i
 		);
 	});
 	renderData(filteredCharacters);
 });
+
+function validationInputs(childInput, data) {
+	if ((data.age || data.capsule) && /^\d+$/.test(childInput.value)) {
+		return true;
+	} else if (
+		data.gender &&
+		childInput.value.length === 1 &&
+		/M|F|m|f/.test(childInput.value)
+	) {
+		return true;
+	} else if (/^[a-zA-Z\s]*$/.test(childInput.value)) {
+		return true;
+	}
+	return false;
+}
 
 init();
 renderData();

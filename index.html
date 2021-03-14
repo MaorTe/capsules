@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="./css/style.css" />
 	</head>
 	<body>
-		<h1>Sort Table</h1>
+		<h1>Capsules Table</h1>
 		<div class="container">
 			<div><label for="search">Search:</label></div>
 			<input
@@ -29,7 +29,7 @@
 				<option value="gender">Gender</option>
 				<option value="hobby">Hobby</option>
 			</select>
-
+			<div class="loading-title hidden" data-loading><h1>Loading...</h1></div>
 			<table class="table-striped">
 				<thead>
 					<tr>
@@ -45,6 +45,7 @@
 						<th></th>
 					</tr>
 				</thead>
+
 				<tbody class="tableBody"></tbody>
 			</table>
 		</div>
